@@ -1,0 +1,21 @@
+{
+  "name": "web-mcp",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^24.0.13",
+    "mcp-framework": "^0.2.15",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
