@@ -15,7 +15,9 @@
   "dependencies": {
     "@types/node": "^24.0.13",
     "mcp-framework": "^0.2.15",
+    "puppeteer": "^24.12.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "zod": "^3.25.76"
   }
 }
