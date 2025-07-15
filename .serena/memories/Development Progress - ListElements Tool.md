@@ -1,0 +1,1 @@
+Progress Update: The `list_elements` tool is complete. It returns a serializable array of elements with their text and attributes, enabling the AI to "see" and analyze page content. The design was simplified to omit a stable 'id' for now. It has been registered and documented.

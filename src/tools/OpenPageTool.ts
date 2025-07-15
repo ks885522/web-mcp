@@ -1,7 +1,6 @@
 import { MCPTool, logger } from "mcp-framework";
-import puppeteer, { type LaunchOptions } from "puppeteer";
 import { z } from "zod";
-import "dotenv/config";
+import { BrowserManager } from "../core/BrowserManager.js";
 
 const schema = z.object({
   url: z.string().url().describe("The URL to open."),
@@ -9,36 +8,18 @@ const schema = z.object({
 
 export class OpenPageTool extends MCPTool<typeof schema> {
   readonly name = "open_page";
-  readonly description = "Opens a new browser page to the specified URL. It can use a local Chrome instance if environment variables are set.";
+  readonly description = "Opens a new browser page to the specified URL and returns a page ID.";
   readonly schema = schema;
 
-  async execute(input: z.infer<typeof schema>): Promise<string> {
+  async execute(input: z.infer<typeof schema>): Promise<{ page_id: string }> {
     try {
-      const launchOptions: LaunchOptions = {
-        headless: false,
-      };
-
-      const executablePath = process.env.CHROME_EXECUTABLE_PATH;
-      const userDataDir = process.env.CHROME_USER_DATA_DIR;
-
-      if (executablePath && userDataDir) {
-        logger.info("Using local Chrome instance.");
-        launchOptions.executablePath = "C:/Program Files/Google/Chrome/Application/chrome.exe";
-        launchOptions.userDataDir = "C:/Users/Jack/AppData/Local/Google/Chrome/User Data";
-      } else {
-        logger.info("Using new browser instance.");
-      }
-      const browser = await puppeteer.launch(launchOptions);
-      const page = await browser.newPage();
-      await page.goto(input.url);
-
-      // We don't close the browser here to allow the user to see the page.
-      // In a real scenario, we would need a strategy to manage browser instances.
-
-      return `Successfully opened ${input.url}`;
+      const pageId = await BrowserManager.getInstance().createPage(input.url);
+      return { page_id: pageId };
     } catch (error: any) {
-      logger.error(`Failed to open ${input.url}. Error: ${error.message}`);
-      return `Failed to open ${input.url}. Error: ${error.message}`;
+      logger.error(`Failed to open page at ${input.url}. Error: ${error.message}`);
+      // Re-throwing the error to be handled by the MCP server,
+      // which will then send a structured error back to the AI agent.
+      throw error;
     }
   }
 } 

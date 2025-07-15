@@ -1,0 +1,1 @@
+Progress Update: The `wait_for_navigation` tool is complete. This crucial tool allows the AI to synchronize its actions with page loads, preventing errors from operations on stale or incomplete pages. It has been registered with the server.

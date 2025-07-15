@@ -1,0 +1,1 @@
+Progress Update: The `open_page` tool is complete. It has been refactored to use the central `BrowserManager` to create new pages, returning a `page_id` for stateful operations. Its documentation in README.md is up-to-date.

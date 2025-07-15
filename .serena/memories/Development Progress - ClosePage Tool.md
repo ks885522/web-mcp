@@ -1,0 +1,1 @@
+Progress Update: The `close_page` tool is complete. It uses the `BrowserManager` to close a specific page by its `page_id`, ensuring proper resource cleanup.

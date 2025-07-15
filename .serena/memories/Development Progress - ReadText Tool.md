@@ -1,0 +1,1 @@
+Progress Update: The `read_text` tool is complete. It retrieves the text content from a specified element, using `waitForSelector` to handle dynamically loaded content. It has been registered with the server.

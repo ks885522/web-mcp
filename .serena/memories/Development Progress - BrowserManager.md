@@ -1,0 +1,1 @@
+Progress Update: The core `BrowserManager` module has been implemented, centralizing browser and page lifecycle management. The `open_page` tool has been refactored to use the manager. This completes the foundational step for all browser tools.
