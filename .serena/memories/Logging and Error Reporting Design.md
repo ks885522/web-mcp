@@ -1,0 +1,1 @@
+Logging must use the framework's built-in `logger`, not `console.log`. Use `logger.info` for key events and `logger.debug` for verbose details. All tools must wrap operations in `try...catch` blocks. Errors should be returned as a structured object `{ status: 'error', error_type: 'ERROR_TYPE', message: '...' }` to allow the AI to parse the failure reason and react accordingly.

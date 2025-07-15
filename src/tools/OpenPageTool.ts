@@ -1,4 +1,4 @@
-import { MCPTool } from "mcp-framework";
+import { MCPTool, logger } from "mcp-framework";
 import puppeteer, { type LaunchOptions } from "puppeteer";
 import { z } from "zod";
 import "dotenv/config";
@@ -22,13 +22,12 @@ export class OpenPageTool extends MCPTool<typeof schema> {
       const userDataDir = process.env.CHROME_USER_DATA_DIR;
 
       if (executablePath && userDataDir) {
-        console.log("Using local Chrome instance.");
-        launchOptions.executablePath = executablePath;
-        launchOptions.userDataDir = userDataDir;
+        logger.info("Using local Chrome instance.");
+        launchOptions.executablePath = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+        launchOptions.userDataDir = "C:/Users/Jack/AppData/Local/Google/Chrome/User Data";
       } else {
-        console.log("Using new browser instance.");
+        logger.info("Using new browser instance.");
       }
-
       const browser = await puppeteer.launch(launchOptions);
       const page = await browser.newPage();
       await page.goto(input.url);
@@ -38,7 +37,7 @@ export class OpenPageTool extends MCPTool<typeof schema> {
 
       return `Successfully opened ${input.url}`;
     } catch (error: any) {
-      console.error(error);
+      logger.error(`Failed to open ${input.url}. Error: ${error.message}`);
       return `Failed to open ${input.url}. Error: ${error.message}`;
     }
   }

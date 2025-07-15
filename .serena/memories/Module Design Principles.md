@@ -1,0 +1,1 @@
+Modules are designed around a central `BrowserManager` (Singleton) that handles the lifecycle of the single Puppeteer `Browser` instance and all `Page` instances. Individual MCP tools are stateless; they receive a `page_id` and use the `BrowserManager` to get the corresponding `Page` object to perform atomic actions. This separates browser management from tool logic.

@@ -1,0 +1,1 @@
+The project follows a standard Node.js/TypeScript structure. `src` contains all TypeScript source, with `index.ts` as the server entry point and `tools/` for all MCP tool modules. Compiled JavaScript is output to `dist`. Configuration files (`package.json`, `tsconfig.json`, `.gitignore`, `.env`) are at the root. A `tests` directory is reserved for future testing.

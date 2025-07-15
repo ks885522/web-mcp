@@ -1,6 +1,9 @@
-import { MCPServer } from "mcp-framework";
+import { MCPServer, MCPServerConfig } from "mcp-framework";
+import { OpenPageTool } from "./tools/OpenPageTool.js";
 
-const server = new MCPServer();
+const server = new MCPServer({
+  tools: [new OpenPageTool()],
+} as MCPServerConfig);
 
 server.start().catch((error) => {
   console.error("Server error:", error);
