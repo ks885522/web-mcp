@@ -104,8 +104,45 @@ web-mcp/
 | **`screenshot`**            | 對指定分頁進行截圖 (不支援對 iframe 單獨截圖)。         | `page_id: z.string()`, `full_page?: z.boolean()`                                                                        | `{ "image_base64": "..." }`                                                        |
 | **`get_dom_tree`**          | 獲取頁面或 iframe 的 DOM 樹結構（包含 Shadow DOM）。    | `page_id: z.string()`, `frame_id?: z.string()`                                                                          | `{ "dom_tree": "..." }`                                                            |
 | **`switch_to_frame`**       | 切換執行上下文到指定的 iframe。                         | `page_id: z.string()`, `iframe_selector: z.string()`                                                                    | `{ "frame_id": "a-unique-id" }`                                                    |
+| **`evaluate_on_element`**   | 在指定元素上執行一段 JS 函式字串。                      | `page_id: z.string()`, `frame_id?: z.string()`, `selector: z.string()`, `function_string: z.string()`            | `{ "result": any }`                                                                |
 
 **選擇器語法 (Selector Syntax)**: 所有接受 `selector` 參數的工具，都支援 `>>>` 組合器，用以穿透**單層或多層巢狀的 Shadow DOM**。例如：`"app-container >>> user-card >>> #email-input"`。
+
+**JavaScript 函式字串 (`function_string`)**: `evaluate_on_element` 工具接受一個字串，該字串必須是一個有效的、可以傳遞給 `new Function()` 的 JavaScript 函式。例如：`"(el) => el.textContent"`。
+
+#### 進階用法範例：開發者級除錯
+
+`evaluate_on_element` 工具的設計賦予了 AI 極大的靈活性，以下是如何使用它來實現 QA 團隊建議的“開發者級”功能：
+
+**1. 獲取元素詳細狀態 (Element Inspector)**
+
+要獲取一個元素的精確位置、大小、可見性和 HTML，AI Agent 可以構建如下請求：
+
+```json
+{
+  "tool_name": "evaluate_on_element",
+  "parameters": {
+    "page_id": "...",
+    "selector": "#some-button",
+    "function_string": "(el) => ({ boundingBox: el.getBoundingClientRect(), isVisible: el.checkVisibility(), outerHTML: el.outerHTML })"
+  }
+}
+```
+
+**2. 強制觸發點擊 (Forced Event Trigger)**
+
+當標準的 `click_element` 工具因元素被遮擋等原因失敗時，AI Agent 可以使用此方法繞過可見性檢查，直接觸發點擊事件：
+
+```json
+{
+  "tool_name": "evaluate_on_element",
+  "parameters": {
+    "page_id": "...",
+    "selector": "#some-button",
+    "function_string": "(el) => el.click()"
+  }
+}
+```
 
 ### 6. Log 與錯誤回報設計 (Logging and Error Reporting)
 

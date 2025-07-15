@@ -9,6 +9,7 @@ import { ListElementsTool } from "./tools/ListElementsTool.js";
 import { ScreenshotTool } from "./tools/ScreenshotTool.js";
 import { GetDomTreeTool } from "./tools/GetDomTreeTool.js";
 import { SwitchToFrameTool } from "./tools/SwitchToFrameTool.js";
+import { EvaluateOnElementTool } from "./tools/EvaluateOnElementTool.js";
 
 const server = new MCPServer({
   tools: [
@@ -22,6 +23,7 @@ const server = new MCPServer({
     new ScreenshotTool(),
     new GetDomTreeTool(),
     new SwitchToFrameTool(),
+    new EvaluateOnElementTool(),
   ],
 } as MCPServerConfig);
 

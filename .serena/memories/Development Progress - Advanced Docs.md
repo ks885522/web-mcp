@@ -1,0 +1,1 @@
+Progress Update: The `README.md` has been updated with an "Advanced Usage Examples" section, detailing how to use the `evaluate_on_element` tool to fulfill QA's requests for an element inspector and a forced-click mechanism. This provides clear guidance for the QA team.
