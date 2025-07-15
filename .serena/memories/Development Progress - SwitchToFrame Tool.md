@@ -1,0 +1,1 @@
+Progress Update: The `switch_to_frame` tool is complete. It allows switching the execution context to an iframe by its selector. The BrowserManager has been enhanced to manage frame contexts, returning a `frame_id` for subsequent operations. The tool has been registered and documented.

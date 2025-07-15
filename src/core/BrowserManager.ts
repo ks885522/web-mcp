@@ -2,11 +2,13 @@ import puppeteer, { Browser, Page, LaunchOptions } from "puppeteer";
 import { randomUUID } from "node:crypto";
 import "dotenv/config";
 import { logger } from "mcp-framework";
+import { ElementHandle, Frame } from "puppeteer";
 
 export class BrowserManager {
   private static instance: BrowserManager;
   private browser: Browser | null = null;
   private pages: Map<string, Page> = new Map();
+  private frames: Map<string, Frame> = new Map();
 
   private constructor() {}
 
@@ -43,6 +45,7 @@ export class BrowserManager {
       logger.warn("BrowserManager: Browser disconnected.");
       this.browser = null;
       this.pages.clear();
+      this.frames.clear();
     });
 
     return this.browser;
@@ -90,7 +93,64 @@ export class BrowserManager {
       await this.browser.close();
       this.browser = null;
       this.pages.clear();
+      this.frames.clear();
       logger.info("BrowserManager: Browser explicitly closed.");
     }
+  }
+
+  public async getContext(pageId: string, frameId?: string): Promise<Page | Frame> {
+    if (frameId) {
+      const frame = this.getFrame(frameId);
+      if (frame) return frame;
+      throw new Error(`Frame with id "${frameId}" not found.`);
+    }
+    const page = this.getPage(pageId);
+    if (page) return page;
+    throw new Error(`Page with id "${pageId}" not found.`);
+  }
+
+  public async findElement(context: Page | Frame, selector: string): Promise<ElementHandle<Element> | null> {
+    logger.debug(`Finding element for selector: ${selector}`);
+    const parts = selector.split('>>>').map(s => s.trim());
+    
+    let opContext: Page | Frame | ElementHandle = context;
+    for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        const elementHandle: ElementHandle<Element> | null = await opContext.waitForSelector(part, { timeout: 5000 });
+        if (!elementHandle) return null;
+        const shadowRoot: puppeteer.JSHandle | null = await elementHandle.evaluateHandle((el: Element) => el.shadowRoot);
+        if (!shadowRoot) return null;
+        opContext = shadowRoot as ElementHandle;
+    }
+    
+    return opContext.waitForSelector(parts[parts.length - 1], { timeout: 5000 });
+  }
+
+  public async findElements(context: Page | Frame, selector: string): Promise<ElementHandle<Element>[]> {
+    logger.debug(`Finding elements for selector: ${selector}`);
+    const parts = selector.split('>>>').map(s => s.trim());
+    
+    let opContext: Page | Frame | ElementHandle = context;
+    for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        const elementHandle: ElementHandle<Element> | null = await opContext.waitForSelector(part, { timeout: 5000 });
+        if (!elementHandle) return [];
+        const shadowRoot: puppeteer.JSHandle | null = await elementHandle.evaluateHandle((el: Element) => el.shadowRoot);
+        if (!shadowRoot) return [];
+        opContext = shadowRoot as ElementHandle;
+    }
+    
+    return opContext.$$(parts[parts.length - 1]);
+  }
+
+  public getFrame(frameId: string): Frame | undefined {
+    return this.frames.get(frameId);
+  }
+
+  public registerFrame(frame: Frame): string {
+    const frameId = randomUUID();
+    this.frames.set(frameId, frame);
+    logger.info(`[${frameId}] Frame registered.`);
+    return frameId;
   }
 } 

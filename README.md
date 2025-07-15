@@ -96,12 +96,16 @@ web-mcp/
 | --------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **`open_page`**             | 開啟一個新分頁並導航到指定 URL。                        | `url: z.string().url()`                                                                                         | `{ "page_id": "a-unique-id" }`                                                     |
 | **`close_page`**            | 關閉指定的分頁。                                        | `page_id: z.string()`                                                                                           | `{ "status": "success" }`                                                          |
-| **`type_text`**             | 在指定的元素中輸入文字。                                | `page_id: z.string()`, `selector: z.string()`, `text: z.string()`                                               | `{ "status": "success" }`                                                          |
-| **`click_element`**         | 點擊指定的元素。                                        | `page_id: z.string()`, `selector: z.string()`                                                                   | `{ "status": "success" }`                                                          |
-| **`read_text`**             | 讀取指定元素的文字內容。                                | `page_id: z.string()`, `selector: z.string()`                                                                   | `{ "text": "..." }`                                                                |
-| **`list_elements`**         | 列出符合選擇器的所有元素的簡要資訊。                    | `page_id: z.string()`, `selector: z.string()`                                                                   | `{ "elements": [{ "text": "...", "attributes": {...} }] }`                         |
-| **`wait_for_navigation`**   | 等待頁面完成導航。                                      | `page_id: z.string()`                                                                                           | `{ "status": "success" }`                                                          |
-| **`screenshot`**            | 對指定分頁進行截圖。                                    | `page_id: z.string()`, `full_page?: z.boolean()`                                                                | `{ "image_base64": "..." }`                                                        |
+| **`type_text`**             | 在指定的元素中輸入文字。                                | `page_id: z.string()`, `frame_id?: z.string()`, `selector: z.string()`, `text: z.string()`                               | `{ "status": "success" }`                                                          |
+| **`click_element`**         | 點擊指定的元素。                                        | `page_id: z.string()`, `frame_id?: z.string()`, `selector: z.string()`                                                  | `{ "status": "success" }`                                                          |
+| **`read_text`**             | 讀取指定元素的文字內容。                                | `page_id: z.string()`, `frame_id?: z.string()`, `selector: z.string()`                                                  | `{ "text": "..." }`                                                                |
+| **`list_elements`**         | 列出符合選擇器的所有元素的簡要資訊。                    | `page_id: z.string()`, `frame_id?: z.string()`, `selector: z.string()`                                                  | `{ "elements": [{ "text": "...", "attributes": {...} }] }`                         |
+| **`wait_for_navigation`**   | 等待頁面或 iframe 完成導航。                            | `page_id: z.string()`, `frame_id?: z.string()`                                                                          | `{ "status": "success" }`                                                          |
+| **`screenshot`**            | 對指定分頁進行截圖 (不支援對 iframe 單獨截圖)。         | `page_id: z.string()`, `full_page?: z.boolean()`                                                                        | `{ "image_base64": "..." }`                                                        |
+| **`get_dom_tree`**          | 獲取頁面或 iframe 的 DOM 樹結構（包含 Shadow DOM）。    | `page_id: z.string()`, `frame_id?: z.string()`                                                                          | `{ "dom_tree": "..." }`                                                            |
+| **`switch_to_frame`**       | 切換執行上下文到指定的 iframe。                         | `page_id: z.string()`, `iframe_selector: z.string()`                                                                    | `{ "frame_id": "a-unique-id" }`                                                    |
+
+**選擇器語法 (Selector Syntax)**: 所有接受 `selector` 參數的工具，都支援 `>>>` 組合器，用以穿透**單層或多層巢狀的 Shadow DOM**。例如：`"app-container >>> user-card >>> #email-input"`。
 
 ### 6. Log 與錯誤回報設計 (Logging and Error Reporting)
 
@@ -114,8 +118,7 @@ web-mcp/
         *   `logger.debug()`: 用於記錄僅在開發和除錯時需要的詳細資訊。
 
 *   **錯誤回報 (Error Reporting)**:
-    *   **內部捕獲**: 工具的 `execute` 方法必須包含 `try...catch` 區塊，以防止未處理的異常導致伺服器崩潰。
-    *   **結構化錯誤**: 當操作失敗時，工具應回傳一個結構化的 JSON 物件，而不是簡單的錯誤訊息字串。這使得 AI Agent 能夠以編程方式理解錯誤原因。
+    *   **結構化回傳**: 當操作失敗時，工具**不應**拋出異常，而是**必須**回傳一個結構化的 JSON 物件，而不是簡單的錯誤訊息字串。這使得 AI Agent 能夠以編程方式理解錯誤原因。
         ```json
         {
           "status": "error",

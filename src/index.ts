@@ -7,6 +7,8 @@ import { WaitForNavigationTool } from "./tools/WaitForNavigationTool.js";
 import { ReadTextTool } from "./tools/ReadTextTool.js";
 import { ListElementsTool } from "./tools/ListElementsTool.js";
 import { ScreenshotTool } from "./tools/ScreenshotTool.js";
+import { GetDomTreeTool } from "./tools/GetDomTreeTool.js";
+import { SwitchToFrameTool } from "./tools/SwitchToFrameTool.js";
 
 const server = new MCPServer({
   tools: [
@@ -18,6 +20,8 @@ const server = new MCPServer({
     new ReadTextTool(),
     new ListElementsTool(),
     new ScreenshotTool(),
+    new GetDomTreeTool(),
+    new SwitchToFrameTool(),
   ],
 } as MCPServerConfig);
 

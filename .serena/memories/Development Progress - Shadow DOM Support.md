@@ -1,0 +1,1 @@
+Progress Update: Single-level Shadow DOM traversal is now supported. A `>>>` combinator was added to the selector syntax. All element-based tools have been refactored to use the central `BrowserManager.findElement(s)` methods. The error handling strategy was updated to return structured errors directly, removing the need for custom error classes and problematic imports.
