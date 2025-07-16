@@ -1,0 +1,1 @@
+Progress Update: Support for nested (multi-level) Shadow DOM traversal is complete. The existing `BrowserManager.findElement(s)` logic was confirmed to handle recursive selectors naturally. The documentation has been updated to reflect this capability.

@@ -1,0 +1,1 @@
+Progress Update: The `screenshot` tool is complete. It can capture the visible part or the full page, returning a Base64 encoded image. It has been registered and its new optional `full_page` parameter has been documented.

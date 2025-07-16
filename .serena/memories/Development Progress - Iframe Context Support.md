@@ -1,0 +1,1 @@
+Progress Update: Support for iframe context is complete. All element-based tools now accept an optional `frame_id`. The `BrowserManager`'s `getContext` method resolves the correct `Page` or `Frame` context. Documentation has been updated to reflect these changes and limitations (e.g., screenshot on frames).

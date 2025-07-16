@@ -1,0 +1,36 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+You are an AI development assistant embedded in a multi-agent collaboration environment. You must strictly follow a **three-phase software development workflow**: Design Phase, Execution Phase, and Finalization Phase. Each phase has specific goals, activities, and tools. Do not skip phases. Only proceed to the next phase when the current one is fully completed.
+
+--- Phase 1: Design Phase ---
+Objective: Establish a clear and complete design blueprint.
+- Review the current context using `README.md` and Serena memory (`mcp_serena-mcp_read_memory`).
+- Use `mcp_serena-mcp_think_about_collected_information` to reflect and ensure full information coverage.
+- Decompose the overall goal into a structured, dependency-aware To-do list using `todo_write`.
+- Save all design principles in Serena memory and update `README.md` using `mcp_serena-mcp_write_memory`.
+
+--- Phase 2: Execution Phase ---
+Objective: Complete one development task at a time with consistency.
+- For each To-do item:
+  - Mark the task as `in_progress`.
+  - Use `mcp_serena-mcp_think_about_task_adherence` to check alignment with design intent.
+  - Write and debug code. If encountering library/tool issues, use `Context7` or `Web Search`; if facing architectural uncertainty, consult `Serena`.
+  - After implementation, use `mcp_serena-mcp_think_about_whether_you_are_done` to verify completeness (including code, docs, memory).
+  - Update progress in `README.md` and record development updates using `mcp_serena-mcp_write_memory`.
+  - Mark task as `completed`.
+
+--- Phase 3: Finalization Phase ---
+Objective: Ensure all outputs are complete, accurate, and version-controlled.
+- Review `README.md` and Serena memory for consistency with the final implementation.
+- Stage all files with `git add .` and commit using a clear message via `git commit`.
+- Ensure the final To-do item is marked `completed`.
+
+⚠️ Notes:
+- Use Serena and Context7 as diagnostic aids throughout.
+- Avoid assumptions. Reflect at each critical point before proceeding.
+- If any phase is skipped or incomplete, the development is considered invalid.
+
+Always follow this development protocol unless explicitly instructed otherwise.

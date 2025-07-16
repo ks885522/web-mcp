@@ -1,0 +1,1 @@
+The data flow is unidirectional: AI Agent sends a JSON-RPC request to the MCP Server. The server routes it to the appropriate Tool Module. The tool gets a Page object from the BrowserManager, executes the Puppeteer command, and returns the result. The result is then packaged and sent back to the AI Agent along the same path. The BrowserManager handles all state updates.

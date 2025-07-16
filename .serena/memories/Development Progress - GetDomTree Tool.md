@@ -1,0 +1,1 @@
+Progress Update: The `get_dom_tree` tool is complete. This diagnostic tool allows the AI to get a string representation of the page's DOM, including Shadow DOMs, which is crucial for debugging element location issues. It has been registered and documented.
